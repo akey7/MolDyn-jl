@@ -68,17 +68,7 @@ one_two_bonds_req = [r_ab_eq_hcl r_ab_eq_hcl]
 
 dt = 1e-15
 
-for time_i in 2:num_steps
-    for bond_i in [1 2]
-        k_ab = one_two_bonds_kab[bond_i]
-        r_eq = one_two_bonds_req[bond_i]
-        a_i = one_two_bonds[bond_i, 1]
-        b_i = one_two_bonds[bond_i, 2]
-        qs[time_i, a_i, :] = qs[time_i-1, a_i, :] + vs[time_i-1, a_i, :] .* dt + accels[time_i-1, a_i, :].*dt^2
-        accels[time_i, a_i, :] = -one_bond_stretch_gradient(qs[time_i-1, a_i, :], qs[time_i-1, b_i, :], k_ab, r_eq) / ms[a_i]
-        vs[time_i, a_i, :] = vs[time_i-1, a_i, :] + (accels[time_i-1, a_i, :] + accels[time_i, a_i, :]) .* dt .* 0.5
-    end
-end
+stretch_velocity_verlet(qs, vs, accels, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps)
 
 ###########################################################
 # PRINT START AND END RESULT                              #
