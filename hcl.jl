@@ -12,7 +12,7 @@ using .MolDyn
 ###########################################################
 
 kg_per_amu = 1.661e-27
-num_steps = 250
+num_steps = 25000
 
 ###########################################################
 # ARRAYS HOLDING ATOM AND BOND INFORMATION                #
@@ -40,11 +40,15 @@ r_ab_eq_hcl = 1.57e-10
 # Assume Cl is at 0,0,0 and H lies along the x-axis
 
 # HCl equilibrium bond length
-qs[1, 2, :] = [r_ab_eq_hcl*0.9, 0.0, 0.0]
+qs[1, 2, :] = [r_ab_eq_hcl*0.999, 0.0, 0.0]
 
-# Masses, Cl first then H
-ms[1] = 35 * kg_per_amu
-ms[2] = 1 * kg_per_amu
+# # Masses, Cl first then H
+# ms[1] = 35 * kg_per_amu
+# ms[2] = 1 * kg_per_amu
+
+# Make each mass the reduced mass of 1H35Cl
+ms[1] = (35*1) / (35+1) * kg_per_amu
+ms[2] = (35*1) / (35+1) * kg_per_amu
 
 # 1-2 Bonds
 # Rows are bonds, columns are atoms participating in bond
@@ -56,7 +60,7 @@ one_two_bonds = [1 2; 2 1]
 # Note: There is the same constant for each direction of the bond
 # HCl bond constant 516 N/m according to Atkins and de Paula, pg. 454
 
-one_two_bonds_kab = [1.0 1.0]
+one_two_bonds_kab = [516.0 516.0]
 
 # 1-2 Bonds, equilibrium distances
 # Note: There is a distance for each direction of the bond
@@ -67,21 +71,14 @@ one_two_bonds_req = [r_ab_eq_hcl r_ab_eq_hcl]
 # VELOCITY VERLET                                         #
 ###########################################################
 
-dt = 1e-15
+dt = 1e-18
 
 stretch_velocity_verlet(qs, vs, accels, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps)
-
-###########################################################
-# PRINT START AND END RESULT                              #
-###########################################################
-
-println("Cl start $(qs[1,1,:]), Cl end $(qs[100,1,:])")
-println("H start $(qs[1,2,:]), H end $(qs[100,2,:])")
 
 ###########################################################
 # PLOT H X-AXIS TRAJECTORY                                #
 ###########################################################
 
-display(plot(eachindex(qs[:, 2, 1]), qs[:, 2, 1]))
+display(plot(eachindex(qs[:, 2, 1])/1000, qs[:, 2, 1]))
 println("When done looking at the plot, press enter to exit.")
 readline()
