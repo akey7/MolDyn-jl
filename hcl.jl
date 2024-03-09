@@ -42,9 +42,13 @@ r_ab_eq_hcl = 1.57e-10
 # HCl equilibrium bond length
 qs[1, 2, :] = [r_ab_eq_hcl*0.999, 0.0, 0.0]
 
-# Masses, Cl first then H
-ms[1] = 35 * kg_per_amu
-ms[2] = 1 * kg_per_amu
+# # Masses, Cl first then H
+# ms[1] = 35 * kg_per_amu
+# ms[2] = 1 * kg_per_amu
+
+# Make each mass the reduced mass of 1H35Cl
+ms[1] = (35*1) / (35+1) * kg_per_amu
+ms[2] = (35*1) / (35+1) * kg_per_amu
 
 # 1-2 Bonds
 # Rows are bonds, columns are atoms participating in bond
