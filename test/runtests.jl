@@ -11,8 +11,6 @@ function setup_test_environment()
     return Dict(:qs => qs, :r_ab_eq_hcl => r_ab_eq_hcl)
 end
 
-using Test
-
 @testset "Example Test Set" begin
     env = setup_test_environment()
     result = u_stretch(env[:qs][1,:,:], env[:qs][2,:,:], 1.0, env[:r_ab_eq_hcl])
