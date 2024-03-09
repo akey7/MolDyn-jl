@@ -11,9 +11,15 @@ function setup_test_environment()
     return Dict(:qs => qs, :r_ab_eq_hcl => r_ab_eq_hcl)
 end
 
-@testset "Example Test Set" begin
+@testset "Test u_stretch" begin
     env = setup_test_environment()
     result = u_stretch(env[:qs][1,:,:], env[:qs][2,:,:], 1.0, env[:r_ab_eq_hcl])
-    @test result ≈ 0.0 atol = 0.1
+    @test result ≈ 0.0 atol = 0.001
 end
 
+@testset "Test one_bond_stretch_gradient" begin
+    env = setup_test_environment()
+    result = one_bond_stretch_gradient(env[:qs][1,:,:], env[:qs][2,:,:], 1.0, env[:r_ab_eq_hcl])
+    @test length(result) == 3
+    @test all(isapprox.(result, [0.0 0.0 0.0], atol=1e-2))
+end
