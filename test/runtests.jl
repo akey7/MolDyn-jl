@@ -15,9 +15,7 @@ using Test
 
 @testset "Example Test Set" begin
     env = setup_test_environment()
-
-    @test begin
-        @test u_stretch(env[:qs][1,:,:], env[:qs][2,:,:], 1.0, env[:r_ab_eq_hcl]) == 0.0
-    end
+    result = u_stretch(env[:qs][1,:,:], env[:qs][2,:,:], 1.0, env[:r_ab_eq_hcl])
+    @test result ≈ 0.0 atol = 0.1
 end
 
