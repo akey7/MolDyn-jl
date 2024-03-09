@@ -2,6 +2,8 @@
 # MODULES                                                 #
 ###########################################################
 
+using Plots
+
 include("src/mol_dyn_md.jl")
 using .MolDyn
 
@@ -10,7 +12,7 @@ using .MolDyn
 ###########################################################
 
 kg_per_amu = 1.661e-27
-num_steps = 100
+num_steps = 1000
 
 ###########################################################
 # ARRAYS HOLDING ATOM AND BOND INFORMATION                #
@@ -79,8 +81,16 @@ for time_i in 2:num_steps
 end
 
 ###########################################################
-# PRINT RESULT                                            #
+# PRINT START AND END RESULT                              #
 ###########################################################
 
 println("Cl start $(qs[1,1,:]), Cl end $(qs[100,1,:])")
 println("H start $(qs[1,2,:]), H end $(qs[100,2,:])")
+
+###########################################################
+# PLOT H X-AXIS TRAJECTORY                                #
+###########################################################
+
+display(plot(eachindex(qs[:, 2, 1]), qs[:, 2, 1]))
+println("When done looking at the plot, press enter to exit.")
+readline()
