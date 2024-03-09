@@ -49,3 +49,4 @@ ms[2] = 1 * kg_per_amu
 
 println(r_ab(qs[1,:,:], qs[2,:,:]))
 println(u_stretch(qs[1,:,:], qs[2,:,:], 1.0, r_ab_eq_hcl))
+println(one_bond_stretch_gradient(qs[1,:,:], qs[2,:,:], 1.0, r_ab_eq_hcl))
