@@ -56,7 +56,6 @@ one_two_bonds = [1 2; 2 1]
 # Note: There is the same constant for each direction of the bond
 # HCl bond constant 516 N/m according to Atkins and de Paula, pg. 454
 
-# one_two_bonds_kab = [1.0 1.0]
 one_two_bonds_kab = [516.0 516.0]
 
 # 1-2 Bonds, equilibrium distances
