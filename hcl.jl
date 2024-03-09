@@ -12,7 +12,7 @@ using .MolDyn
 ###########################################################
 
 kg_per_amu = 1.661e-27
-num_steps = 1000
+num_steps = 10000
 
 ###########################################################
 # ARRAYS HOLDING ATOM AND BOND INFORMATION                #
@@ -67,7 +67,7 @@ one_two_bonds_req = [r_ab_eq_hcl r_ab_eq_hcl]
 # VELOCITY VERLET                                         #
 ###########################################################
 
-dt = 1e-15
+dt = 1e-16
 
 stretch_velocity_verlet(qs, vs, accels, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps)
 
