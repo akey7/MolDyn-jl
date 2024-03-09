@@ -31,10 +31,13 @@ ms = zeros(Float64, num_steps, 2, 1)
 # INITIALIZE SIMULATION                                   #
 ###########################################################
 
+# Equilibrium bond length for HCl
+r_ab_eq_hcl = 1.57e-10
+
 # Assume Cl is at 0,0,0 and H lies along the x-axis
 
 # HCl equilibrium bond length
-qs[1, 2, :] = [1.57e-10, 0.0, 0.0]
+qs[1, 2, :] = [r_ab_eq_hcl, 0.0, 0.0]
 
 # Masses, Cl first then H
 ms[1] = 35 * kg_per_amu
@@ -45,3 +48,4 @@ ms[2] = 1 * kg_per_amu
 ###########################################################
 
 println(r_ab(qs[1,:,:], qs[2,:,:]))
+println(u_stretch(qs[1,:,:], qs[2,:,:], 1.0, r_ab_eq_hcl))
