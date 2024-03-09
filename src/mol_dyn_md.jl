@@ -31,8 +31,8 @@ function stretch_velocity_verlet(xs, vs, accels, one_two_bonds, one_two_bonds_ka
             r_eq = one_two_bonds_req[bond_i]
             atom_a = one_two_bonds[bond_i, 1]
             atom_b = one_two_bonds[bond_i, 2]
+            xs[time_i+1, atom_a, :] = xs[time_i, atom_a, :] + vs[time_i, atom_a, :] * dt + accels[time_i, atom_a, :] * dt^2
             v_mid = vs[time_i, atom_a, :] + 0.5 * accels[time_i, atom_a, :] * dt
-            xs[time_i+1, atom_a, :] = xs[time_i, atom_a, :] + v_mid * dt
             accels[time_i+1, atom_a, :] = -stretch_gradient(xs[time_i, atom_a, :], xs[time_i, atom_b, :], k_ab, r_eq) / ms[atom_a]  # Should this be reduced mass???
             vs[time_i+1, atom_a, :] = v_mid + 0.5 * accels[time_i+1, atom_a, :] * dt
         end
