@@ -12,7 +12,7 @@ using .MolDyn
 ###########################################################
 
 kg_per_amu = 1.661e-27
-num_steps = 250
+num_steps = 1000
 
 ###########################################################
 # ARRAYS HOLDING ATOM AND BOND INFORMATION                #
@@ -74,13 +74,6 @@ one_two_bonds_req = [r_ab_eq_hcl r_ab_eq_hcl]
 dt = 1e-15
 
 stretch_velocity_verlet(qs, vs, accels, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps)
-
-###########################################################
-# PRINT START AND END RESULT                              #
-###########################################################
-
-println("Cl start $(qs[1,1,:]), Cl end $(qs[100,1,:])")
-println("H start $(qs[1,2,:]), H end $(qs[100,2,:])")
 
 ###########################################################
 # PLOT H X-AXIS TRAJECTORY                                #
