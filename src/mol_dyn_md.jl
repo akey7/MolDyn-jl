@@ -8,11 +8,12 @@ function r_ab(a, b)
     sqrt(sum((a-b).^2))
 end
 
-# Stretch energy
+# Stretch energy for a 1-2 bond
 function u_stretch(a::Matrix{Float64}, b::Matrix{Float64}, k_ab::Float64, r_ab_eq::Float64) 
     0.5*k_ab*(r_ab(a,b)-r_ab_eq)^2
 end
 
+# Stretch energy gradient for a single 1-2 bond
 function one_bond_stretch_gradient(a, b, k_ab, r_ab_eq)
     du_drab = k_ab*(r_ab(a, b)-r_ab_eq)
     drab_dxa = (a[1]-b[1])/r_ab(a, b)
