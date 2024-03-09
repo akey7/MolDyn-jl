@@ -2,6 +2,8 @@
 # MODULES                                                 #
 ###########################################################
 
+using Plots
+
 include("src/mol_dyn_md.jl")
 using .MolDyn
 
@@ -13,7 +15,7 @@ kg_per_amu = 1.661e-27
 num_steps = 1000
 
 ###########################################################
-# ARRAYS HOLDING ATOM INFORMATION                         #
+# ARRAYS HOLDING ATOM AND BOND INFORMATION                #
 ###########################################################
 
 # Positions (qs), velocities (vs), and accelerations (accels) arrays:
@@ -38,29 +40,47 @@ r_ab_eq_hcl = 1.57e-10
 # Assume Cl is at 0,0,0 and H lies along the x-axis
 
 # HCl equilibrium bond length
-qs[1, 2, :] = [r_ab_eq_hcl, 0.0, 0.0]
+qs[1, 2, :] = [r_ab_eq_hcl*1.1, 0.0, 0.0]
 
 # Masses, Cl first then H
 ms[1] = 35 * kg_per_amu
 ms[2] = 1 * kg_per_amu
 
+# 1-2 Bonds
+# Rows are bonds, columns are atoms participating in bond
+# Note: This is specifying edges on a graph, so 1-2 also has 2-1
+
+one_two_bonds = [1 2; 2 1]
+
+# 1-2 Bonds, stretch constants
+# Note: There is a constant for each direction of the bond
+
+one_two_bonds_kab = [1.0 1.0]
+
+# 1-2 Bonds, equilibrium distances
+# Note: There is a distance for each direction of the bond
+
+one_two_bonds_req = [r_ab_eq_hcl r_ab_eq_hcl]
+
 ###########################################################
-# PROPAGATE ONE TIME STEP                                 #
+# VELOCITY VERLET                                         #
 ###########################################################
 
 dt = 1e-15
 
-qs[2,1,:] = qs[1,1,:] + vs[1,1,:].*dt + accels[1,1,:].*dt^2
-accels[2,1,:] = -one_bond_stretch_gradient(qs[1,1,:], qs[1,2,:], 1.0, r_ab_eq_hcl) / ms[1]
-vs[2,1,:] = vs[1,1,:] + (accels[1,1,:]+accels[2,1,:]).*dt.*0.5
-
-qs[2,2,:] = qs[1,2,:] + vs[1,2,:].*dt + accels[1,2,:].*dt^2
-accels[2,2,:] = -one_bond_stretch_gradient(qs[1,2,:], qs[1,1,:], 1.0, r_ab_eq_hcl) / ms[2]
-vs[2,2,:] = vs[1,2,:] + (accels[1,2,:]+accels[2,2,:]).*dt.*0.5
+stretch_velocity_verlet(qs, vs, accels, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps)
 
 ###########################################################
-# PRINT RESULT                                            #
+# PRINT START AND END RESULT                              #
 ###########################################################
 
-println("Cl start $(qs[1,1,:]), Cl end $(qs[2,1,:])")
-println("H start $(qs[1,2,:]), H end $(qs[2,2,:])")
+println("Cl start $(qs[1,1,:]), Cl end $(qs[100,1,:])")
+println("H start $(qs[1,2,:]), H end $(qs[100,2,:])")
+
+###########################################################
+# PLOT H X-AXIS TRAJECTORY                                #
+###########################################################
+
+display(plot(eachindex(qs[:, 2, 1]), qs[:, 2, 1]))
+println("When done looking at the plot, press enter to exit.")
+readline()
