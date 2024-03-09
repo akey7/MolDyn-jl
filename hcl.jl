@@ -12,7 +12,7 @@ using .MolDyn
 ###########################################################
 
 kg_per_amu = 1.661e-27
-num_steps = 1000
+num_steps = 250
 
 ###########################################################
 # ARRAYS HOLDING ATOM AND BOND INFORMATION                #
@@ -40,7 +40,7 @@ r_ab_eq_hcl = 1.57e-10
 # Assume Cl is at 0,0,0 and H lies along the x-axis
 
 # HCl equilibrium bond length
-qs[1, 2, :] = [r_ab_eq_hcl*1.1, 0.0, 0.0]
+qs[1, 2, :] = [r_ab_eq_hcl*0.9, 0.0, 0.0]
 
 # Masses, Cl first then H
 ms[1] = 35 * kg_per_amu
@@ -53,7 +53,8 @@ ms[2] = 1 * kg_per_amu
 one_two_bonds = [1 2; 2 1]
 
 # 1-2 Bonds, stretch constants
-# Note: There is a constant for each direction of the bond
+# Note: There is the same constant for each direction of the bond
+# HCl bond constant 516 N/m according to Atkins and de Paula, pg. 454
 
 one_two_bonds_kab = [1.0 1.0]
 
