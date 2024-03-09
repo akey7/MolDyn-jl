@@ -12,7 +12,7 @@ using .MolDyn
 ###########################################################
 
 kg_per_amu = 1.661e-27
-num_steps = 10000
+num_steps = 25000
 
 ###########################################################
 # ARRAYS HOLDING ATOM AND BOND INFORMATION                #
@@ -56,7 +56,8 @@ one_two_bonds = [1 2; 2 1]
 # Note: There is the same constant for each direction of the bond
 # HCl bond constant 516 N/m according to Atkins and de Paula, pg. 454
 
-one_two_bonds_kab = [1.0 1.0]
+# one_two_bonds_kab = [1.0 1.0]
+one_two_bonds_kab = [516.0 516.0]
 
 # 1-2 Bonds, equilibrium distances
 # Note: There is a distance for each direction of the bond
@@ -67,7 +68,7 @@ one_two_bonds_req = [r_ab_eq_hcl r_ab_eq_hcl]
 # VELOCITY VERLET                                         #
 ###########################################################
 
-dt = 1e-16
+dt = 1e-18
 
 stretch_velocity_verlet(qs, vs, accels, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps)
 
@@ -75,6 +76,6 @@ stretch_velocity_verlet(qs, vs, accels, one_two_bonds, one_two_bonds_kab, one_tw
 # PLOT H X-AXIS TRAJECTORY                                #
 ###########################################################
 
-display(plot(eachindex(qs[:, 2, 1]), qs[:, 2, 1]))
+display(plot(eachindex(qs[:, 2, 1])/1000, qs[:, 2, 1]))
 println("When done looking at the plot, press enter to exit.")
 readline()
