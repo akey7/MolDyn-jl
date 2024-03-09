@@ -46,10 +46,6 @@ qs[1, 2, :] = [r_ab_eq_hcl*0.9, 0.0, 0.0]
 ms[1] = 35 * kg_per_amu
 ms[2] = 1 * kg_per_amu
 
-# Reduced masses are identical
-ms[1] = ((35*1)/(35+1)) * kg_per_amu
-ms[2] = ((35*1)/(35+1)) * kg_per_amu
-
 # 1-2 Bonds
 # Rows are bonds, columns are atoms participating in bond
 # Note: This is specifying edges on a graph, so 1-2 also has 2-1
