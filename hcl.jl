@@ -40,7 +40,7 @@ r_ab_eq_hcl = 1.57e-10
 # Assume Cl is at 0,0,0 and H lies along the x-axis
 
 # HCl equilibrium bond length
-qs[1, 2, :] = [r_ab_eq_hcl*0.9, 0.0, 0.0]
+qs[1, 2, :] = [r_ab_eq_hcl*0.999, 0.0, 0.0]
 
 # Masses, Cl first then H
 ms[1] = 35 * kg_per_amu
