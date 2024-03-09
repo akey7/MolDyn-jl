@@ -44,4 +44,4 @@ ms[2] = 1 * kg_per_amu
 # INITIALIZE SIMULATION                                   #
 ###########################################################
 
-println(qs[1,:,:])
+println(r_ab(qs[1,:,:], qs[2,:,:]))

@@ -1,7 +1,9 @@
 module MolDyn
 
+export r_ab
+
 # Distance from atom a to b
-function r_ab(a::Vector{Float64}, b::Vector{Float64})
+function r_ab(a::Matrix{Float64}, b::Matrix{Float64})
     sqrt(sum((a-b).^2))
 end
 
