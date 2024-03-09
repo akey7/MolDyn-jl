@@ -31,7 +31,7 @@ function stretch_velocity_verlet(qs, vs, accels, one_two_bonds, one_two_bonds_ka
             r_eq = one_two_bonds_req[bond_i]
             a_i = one_two_bonds[bond_i, 1]
             b_i = one_two_bonds[bond_i, 2]
-            qs[time_i, a_i, :] = qs[time_i-1, a_i, :] + vs[time_i-1, a_i, :] .* dt + accels[time_i-1, a_i, :].*dt^2
+            qs[time_i, a_i, :] = qs[time_i-1, a_i, :] + vs[time_i-1, a_i, :].*dt + accels[time_i-1, a_i, :].*(dt^2).*0.5
             accels[time_i, a_i, :] = -stretch_gradient(qs[time_i-1, a_i, :], qs[time_i-1, b_i, :], k_ab, r_eq) / ms[a_i]
             vs[time_i, a_i, :] = vs[time_i-1, a_i, :] + (accels[time_i-1, a_i, :] + accels[time_i, a_i, :]) .* dt .* 0.5
         end
