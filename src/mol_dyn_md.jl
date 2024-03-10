@@ -1,7 +1,7 @@
 module MolDyn
 
 # Export everything: Minimially it will all need testing.
-export r_ab, u_stretch, stretch_gradient, stretch_velocity_verlet
+export r_ab, stretch_energy, stretch_gradient, stretch_velocity_verlet
 
 # Distance from atom a to b
 function r_ab(a, b)
@@ -9,7 +9,7 @@ function r_ab(a, b)
 end
 
 # Stretch energy for a 1-2 bond
-function u_stretch(a::Matrix{Float64}, b::Matrix{Float64}, k_ab::Float64, r_ab_eq::Float64) 
+function stretch_energy(a, b, k_ab, r_ab_eq) 
     0.5*k_ab*(r_ab(a,b)-r_ab_eq)^2
 end
 
