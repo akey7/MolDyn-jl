@@ -10,7 +10,7 @@ end
 
 # Stretch energy for a 1-2 bond
 function stretch_energy(a, b, k_ab, r_ab_eq) 
-    0.5*k_ab*(r_ab(a,b)-r_ab_eq)^2
+    0.5*k_ab*(r_ab(a, b)-r_ab_eq)^2
 end
 
 # Kinetic energy for an atom
@@ -31,7 +31,7 @@ function stretch_gradient(a, b, k_ab, r_ab_eq)
 end
 
 # Propagate 1-2 bond stretch trajectories
-function stretch_velocity_verlet(xs, vs, accels, tkes, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps)
+function stretch_velocity_verlet(xs, vs, accels, tkes, tpes, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps)
     for time_i in 1:num_steps-1
         for bond_i in [1 2]
             k_ab = one_two_bonds_kab[bond_i]
@@ -45,9 +45,11 @@ function stretch_velocity_verlet(xs, vs, accels, tkes, one_two_bonds, one_two_bo
         end
 
         tkes[time_i] = total_kinetic_energy(vs, ms, time_i)
+        tpes[time_i] = total_stretch_energy(xs, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, time_i)
     end
 
     tkes[num_steps] = total_kinetic_energy(vs, ms, num_steps)
+    tpes[num_steps] = total_stretch_energy(xs, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, num_steps)
 
     return nothing
 end
@@ -57,8 +59,21 @@ function total_kinetic_energy(vs::Array{Float64}, ms::Array{Float64}, timestep::
     sum([kinetic_energy(vs, ms, timestep, atom) for atom in eachindex(ms)])
 end
 
-# function total_stretch_energy(xs::Array{Float64}, one_two_bonds_kab::Array{Float64}, one_two_bonds_req::Array{Float64}, rabeqstimestep::Int)
+# Determine total stretch energy of the system.
+function total_stretch_energy(xs::Array{Float64}, one_two_bonds::Array{Int}, one_two_bonds_kab::Array{Float64}, one_two_bonds_req::Array{Float64}, timestep::Int)
+    stretch_energies = zeros(Float64, length(one_two_bonds_kab))
+    
+    for i in eachindex(one_two_bonds_kab)
+        atom_a = one_two_bonds[i, 1]
+        atom_b = one_two_bonds[i, 2]
+        k_ab = one_two_bonds_kab[i]
+        r_eq = one_two_bonds_req[i]
+        pos_a = xs[timestep, atom_a, 1:3]
+        pos_b = xs[timestep, atom_b, 1:3]
+        stretch_energies[i] = stretch_energy(pos_a, pos_b, k_ab, r_eq)
+    end
 
-# end
+    sum(stretch_energies)
+end
 
 end
