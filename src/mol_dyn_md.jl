@@ -1,6 +1,5 @@
 module MolDyn
 
-# Export everything: Minimially it will all need testing.
 export r_ab, stretch_energy, stretch_gradient, stretch_velocity_verlet
 
 # Distance from atom a to b
@@ -73,7 +72,8 @@ function total_stretch_energy(xs::Array{Float64}, one_two_bonds::Array{Int}, one
         stretch_energies[i] = stretch_energy(pos_a, pos_b, k_ab, r_eq)
     end
 
-    sum(stretch_energies)
+    # Divide by 2.0 to prevent double counting the 1-2 bonds
+    sum(stretch_energies) / 2.0
 end
 
 end
