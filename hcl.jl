@@ -94,7 +94,7 @@ println("When done looking at the trajectory plot, press enter to continue.")
 readline()
 
 plot(eachindex(xs[:, 2, 1])/1000, tkes, xlabel="Time (fs)", ylabel="J", label="Ek")
-energy_plot = plot!(xs[:, 2, 1]/1000, tpes, label="Ep")
+energy_plot = plot!(eachindex(xs[:, 2, 1])/1000, tpes, label="Ep")
 display(energy_plot)
 println("When done looking the kinetic energies plot, press enter to exit.")
 readline()
