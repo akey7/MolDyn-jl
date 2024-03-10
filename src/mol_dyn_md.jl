@@ -13,6 +13,13 @@ function stretch_energy(a, b, k_ab, r_ab_eq)
     0.5*k_ab*(r_ab(a,b)-r_ab_eq)^2
 end
 
+# Kinetic energy for an atom
+function kinetic_energy(vs::Array{Float64}, ms::Array{Float64}, timestep, atom)
+    v = vs[timestep, atom, :]
+    m = ms[atom]
+    0.5 * m * sum(v.^2)
+end
+
 # Stretch energy gradient for a single 1-2 bond
 function stretch_gradient(a, b, k_ab, r_ab_eq)
     du_drab = 0.5 * k_ab * (2*r_ab(a, b)-2*r_ab_eq)
@@ -47,13 +54,11 @@ end
 
 # Determine the total kinetic energy of the system
 function total_kinetic_energy(vs::Array{Float64}, ms::Array{Float64}, timestep::Int)
-    function kinetic_energy(atom)
-        v = vs[timestep, atom, :]
-        m = ms[atom]
-        0.5 * m * sum(v.^2)
-    end
-
-    sum([kinetic_energy(atom) for atom in eachindex(ms)])
+    sum([kinetic_energy(vs, ms, timestep, atom) for atom in eachindex(ms)])
 end
+
+# function total_stretch_energy(xs::Array{Float64}, one_two_bonds_kab::Array{Float64}, one_two_bonds_req::Array{Float64}, rabeqstimestep::Int)
+
+# end
 
 end
