@@ -18,13 +18,13 @@ num_steps = 25000
 # ARRAYS HOLDING ATOM AND BOND INFORMATION                #
 ###########################################################
 
-# Positions (qs), velocities (vs), and accelerations (accels) arrays:
+# Positions (xs), velocities (vs), and accelerations (accels) arrays:
 # First axis is timestep
 # Second axis are atoms
 # Third axis is x,y,z (meters for position, m/s for velocities)
 
 vs = zeros(Float64, num_steps, 2, 3)
-qs = zeros(Float64, num_steps, 2, 3)
+xs = zeros(Float64, num_steps, 2, 3)
 accels = zeros(Float64, num_steps, 2, 3)
 
 # Masses: The masses of each atom (kg)
@@ -40,7 +40,7 @@ r_ab_eq_hcl = 1.57e-10
 # Assume Cl is at 0,0,0 and H lies along the x-axis
 
 # HCl equilibrium bond length
-qs[1, 2, :] = [r_ab_eq_hcl*0.999, 0.0, 0.0]
+xs[1, 2, :] = [r_ab_eq_hcl*0.999, 0.0, 0.0]
 
 # # Masses, Cl first then H
 # ms[1] = 35 * kg_per_amu
@@ -73,12 +73,12 @@ one_two_bonds_req = [r_ab_eq_hcl r_ab_eq_hcl]
 
 dt = 1e-18
 
-stretch_velocity_verlet(qs, vs, accels, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps)
+stretch_velocity_verlet(xs, vs, accels, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps)
 
 ###########################################################
 # PLOT H X-AXIS TRAJECTORY                                #
 ###########################################################
 
-display(plot(eachindex(qs[:, 2, 1])/1000, qs[:, 2, 1]))
+display(plot(eachindex(xs[:, 2, 1])/1000, xs[:, 2, 1]))
 println("When done looking at the plot, press enter to exit.")
 readline()
