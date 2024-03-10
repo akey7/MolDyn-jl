@@ -28,7 +28,12 @@ xs = zeros(Float64, num_steps, 2, 3)
 accels = zeros(Float64, num_steps, 2, 3)
 
 # Masses: The masses of each atom (kg)
-ms = zeros(Float64, num_steps, 2, 1)
+ms = zeros(Float64, 2)
+
+# Total kinetic energies: The total kinetic energy of the system
+# at each timestep.
+
+tkes = zeros(Float64, num_steps)
 
 ###########################################################
 # INITIALIZE SIMULATION                                   #
@@ -73,12 +78,16 @@ one_two_bonds_req = [r_ab_eq_hcl r_ab_eq_hcl]
 
 dt = 1e-18
 
-stretch_velocity_verlet(xs, vs, accels, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps)
+stretch_velocity_verlet(xs, vs, accels, tkes, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps)
 
 ###########################################################
 # PLOT H X-AXIS TRAJECTORY                                #
 ###########################################################
 
-display(plot(eachindex(xs[:, 2, 1])/1000, xs[:, 2, 1]))
-println("When done looking at the plot, press enter to exit.")
+display(plot(eachindex(xs[:, 2, 1])/1000, xs[:, 2, 1], xlabel="Time (fs)", ylabel="H x position (m)"))
+println("When done looking at the trajectory plot, press enter to continue.")
+readline()
+
+display(plot(eachindex(xs[:, 2, 1])/1000, tkes, xlabel="Time (fs)", ylabel="Kinetic Energy (J)"))
+println("When done looking the kinetic energies plot, press enter to exit.")
 readline()

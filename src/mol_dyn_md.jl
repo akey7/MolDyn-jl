@@ -24,7 +24,7 @@ function stretch_gradient(a, b, k_ab, r_ab_eq)
 end
 
 # Propagate 1-2 bond stretch trajectories
-function stretch_velocity_verlet(xs, vs, accels, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps)
+function stretch_velocity_verlet(xs, vs, accels, tkes, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps)
     for time_i in 1:num_steps-1
         for bond_i in [1 2]
             k_ab = one_two_bonds_kab[bond_i]
@@ -36,7 +36,24 @@ function stretch_velocity_verlet(xs, vs, accels, one_two_bonds, one_two_bonds_ka
             accels[time_i+1, atom_a, :] = -stretch_gradient(xs[time_i, atom_a, :], xs[time_i, atom_b, :], k_ab, r_eq) / ms[atom_a]  # Should this be reduced mass???
             vs[time_i+1, atom_a, :] = v_mid + 0.5 * accels[time_i+1, atom_a, :] * dt
         end
+
+        tkes[time_i] = total_kinetic_energy(vs, ms, time_i)
     end
+
+    tkes[num_steps] = total_kinetic_energy(vs, ms, num_steps)
+
+    return nothing
+end
+
+# Determine the total kinetic energy of the system
+function total_kinetic_energy(vs::Array{Float64}, ms::Array{Float64}, timestep::Int)
+    function kinetic_energy(atom)
+        v = vs[timestep, atom, :]
+        m = ms[atom]
+        0.5 * m * sum(v.^2)
+    end
+
+    sum([kinetic_energy(atom) for atom in eachindex(ms)])
 end
 
 end
