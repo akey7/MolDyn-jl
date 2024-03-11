@@ -70,7 +70,12 @@ tpes = zeros(Float64, num_steps);  # Semicolon to suppress code output from fina
 
 ### Initialize Simulation
 
+Set the initial conditions of the simulation, including start positions and velocities of the atoms and their masses. Also set up the bonds here.
+
 ```{julia}
+#| label: initialize-simulation
+#| include: true
+
 # Equilibrium bond length for HCl
 r_ab_eq_hcl = 1.57e-10
 
@@ -103,16 +108,24 @@ one_two_bonds_req = [r_ab_eq_hcl r_ab_eq_hcl];  # Semicolon to suppress code out
 
 ### Velocity Verlet
 
+Now for the fun part: Run the simulation! Expand the code block to see the function callt that runs the trajectory with a velocity verlet algorithm.
+
 ```{julia}
+#| label: velocity-verlet
+#| include: true
+
 dt = 1e-18
-stretch_velocity_verlet(xs, vs, accels, tkes, tpes, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps)
+stretch_velocity_verlet(xs, vs, accels, tkes, tpes, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps);  # Semicolon to suppress code output from final document
 ```
 
 ## Calculate Analytical Period
 
-Units are seconds
+As a check of the simulation, calculate the analytical period of the oscillation of the <sup>1</sup>H<sup>35</sup>Cl bond. Units are in seconds.
 
 ```{julia}
+#| label: analytical-period
+#| include: true
+
 μ = 1/(1/ms[1]+1/ms[2])
 2π * sqrt(μ/one_two_bonds_kab[1])
 ```
