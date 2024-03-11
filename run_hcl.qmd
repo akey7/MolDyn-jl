@@ -134,18 +134,28 @@ As a check of the simulation, calculate the analytical period of the oscillation
 
 ### X-Coordinate of Hydrogen
 
-The period approximately agrees with analytical period.
+Plot the x-coordinate of the hydrogen. Notice that the period on the plot agrees with analytical period!
 
 ```{julia}
+#| label: x-coordinate-of-hydrogen
+#| include: true
+
 x_axis = eachindex(xs[:, 2, 1]) / 1000
 h_x_axis_trajectory = xs[:, 2, 1]
-plot(x_axis, h_x_axis_trajectory, xlabel="Time (fs)", ylabel="H x position (m)")
+hydrogen_plot = plot(x_axis, h_x_axis_trajectory, xlabel="Time (fs)", ylabel="H x position (m)")
+display(hydrogen_plot)
 ```
 
 ### Total Energy
 
+Plot the kinetic, potential, and total energy of the system.
+
 ```{julia}
+#| label: energy-plots
+#| include: true
+
 plot(x_axis, tkes, xlabel="Time (fs)", ylabel="J", label="Ek")
 plot!(x_axis, tpes, label="Ep")
-plot!(x_axis, tpes + tkes, label="total")
+energy_plot = plot!(x_axis, tpes + tkes, label="total")
+display(energy_plot)
 ```
