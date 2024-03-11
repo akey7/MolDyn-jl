@@ -120,7 +120,10 @@ stretch_velocity_verlet(xs, vs, accels, tkes, tpes, one_two_bonds, one_two_bonds
 
 ## Calculate Analytical Period
 
-As a check of the simulation, calculate the analytical period of the oscillation of the <sup>1</sup>H<sup>35</sup>Cl bond. Units are in seconds.
+As a check of the simulation, calculate the analytical period of the oscillation of the <sup>1</sup>H<sup>35</sup>Cl bond. Units are in seconds. Equation used is the following
+
+$$ {1 \over \mu} = {1 \over m_1} + {1 \over m_2} $$
+$$ T = \sqrt{\mu \over k_b} $$
 
 ```{julia}
 #| label: analytical-period
