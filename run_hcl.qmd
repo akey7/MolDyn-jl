@@ -1,10 +1,11 @@
 ---
-title: "qmd Demo"
-author: "Foo"
+title: "MolDynMD-jl HCl Trajectory"
+author: "Alicia Key"
 date: "03/10/2024"
 format:
   html:
     code-fold: true
+editor: source
 jupyter: julia-1.10
 ---
 
@@ -21,7 +22,13 @@ using .MolDyn
 
 ### Define Constants
 
+Expand code block below to see the contants, which include an amu to kg conversion and the number of steps in the simulation.
+
 ```{julia}
+#| label: set-constants
+#| echo: true
+#| include: true
+
 kg_per_amu = 1.661e-27
 num_steps = 25000
 ```
@@ -94,6 +101,8 @@ stretch_velocity_verlet(xs, vs, accels, tkes, tpes, one_two_bonds, one_two_bonds
 
 ## Calculate Analytical Period
 
+Units are seconds
+
 ```{julia}
 μ = 1/(1/ms[1]+1/ms[2])
 2π * sqrt(μ/one_two_bonds_kab[1])
@@ -106,13 +115,15 @@ stretch_velocity_verlet(xs, vs, accels, tkes, tpes, one_two_bonds, one_two_bonds
 The period approximately agrees with analytical period.
 
 ```{julia}
-plot(eachindex(xs[:, 2, 1])/1000, xs[:, 2, 1], xlabel="Time (fs)", ylabel="H x position (m)")
+x_axis = eachindex(xs[:, 2, 1]) / 1000
+h_x_axis_trajectory = xs[:, 2, 1]
+plot(x_axis, h_x_axis_trajectory, xlabel="Time (fs)", ylabel="H x position (m)")
 ```
 
 ### Total Energy
 
 ```{julia}
-plot(eachindex(xs[:, 2, 1])/1000, tkes, xlabel="Time (fs)", ylabel="J", label="Ek")
-plot!(eachindex(xs[:, 2, 1])/1000, tpes, label="Ep")
-plot!(eachindex(xs[:, 2, 1])/1000, tpes + tkes, label="total")
+plot(x_axis, tkes, xlabel="Time (fs)", ylabel="J", label="Ek")
+plot!(x_axis, tpes, label="Ep")
+plot!(x_axis, tpes + tkes, label="total")
 ```
