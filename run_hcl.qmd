@@ -92,11 +92,18 @@ dt = 1e-18
 stretch_velocity_verlet(xs, vs, accels, tkes, tpes, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps)
 ```
 
+## Calculate Analytical Period
+
+```{julia}
+μ = 1/(1/ms[1]+1/ms[2])
+2π * sqrt(μ/one_two_bonds_kab[1])
+```
+
 ## Make Plots
 
 ### X-Coordinate of Hydrogen
 
-Look at that plot!
+The period approximately agrees with analytical period.
 
 ```{julia}
 plot(eachindex(xs[:, 2, 1])/1000, xs[:, 2, 1], xlabel="Time (fs)", ylabel="H x position (m)")
