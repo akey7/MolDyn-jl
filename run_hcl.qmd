@@ -26,14 +26,13 @@ Expand code block below to see the contants, which include an amu to kg conversi
 
 ```{julia}
 #| label: set-constants
-#| echo: true
 #| include: true
 
 kg_per_amu = 1.661e-27
-num_steps = 25000
+num_steps = 25000;  # Semicolon to suppress code output from final document
 ```
 
-### ARRAYS HOLDING ATOM AND BOND INFORMATION
+### Arrays holding simulation information.
 
 ```{julia}
 # Positions (xs), velocities (vs), and accelerations (accels) arrays:
@@ -56,7 +55,7 @@ tkes = zeros(Float64, num_steps)
 # Total potential energies: Total potential energy of the system
 # at each timestep
 
-tpes = zeros(Float64, num_steps)
+tpes = zeros(Float64, num_steps);  # Semicolon to suppress code output from final document
 ```
 
 ### Initialize Simulation
@@ -89,7 +88,7 @@ one_two_bonds_kab = [516.0 516.0]
 # 1-2 Bonds, equilibrium distances
 # Note: There is a distance for each direction of the bond
 
-one_two_bonds_req = [r_ab_eq_hcl r_ab_eq_hcl]
+one_two_bonds_req = [r_ab_eq_hcl r_ab_eq_hcl];  # Semicolon to suppress code output from final document
 ```
 
 ### Velocity Verlet
