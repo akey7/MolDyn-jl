@@ -9,9 +9,10 @@ editor: source
 jupyter: julia-1.10
 ---
 
-## Load Modules
-
 ```{julia}
+#| label: load-modules
+#| include: false
+
 using Plots
 
 include("src/mol_dyn_md.jl")
