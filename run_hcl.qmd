@@ -9,6 +9,10 @@ editor: source
 jupyter: julia-1.10
 ---
 
+## Purpose of this markdown
+
+The main code that runs the simulation is in the `src/mol_dyn_md.jl` source file. This markdown contians the code to run a simulation using the `MolDyn` module and wrap the inputs and outputs into a nice format.
+
 ```{julia}
 #| label: load-modules
 #| include: false
@@ -33,9 +37,14 @@ kg_per_amu = 1.661e-27
 num_steps = 25000;  # Semicolon to suppress code output from final document
 ```
 
-### Arrays holding simulation information.
+### Vectors and matrices holding simulation information.
+
+Expand the code block below to see the vectors and matrices holding simulation information, including atom velocities, bond connections, energy history and more.
 
 ```{julia}
+#| label: vectors-and-matrices
+#| include: true
+
 # Positions (xs), velocities (vs), and accelerations (accels) arrays:
 # First axis is timestep
 # Second axis are atoms
