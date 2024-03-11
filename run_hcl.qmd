@@ -1,23 +1,34 @@
-###########################################################
-# MODULES                                                 #
-###########################################################
+---
+title: "qmd Demo"
+author: "Foo"
+date: "03/10/2024"
+format:
+  html:
+    code-fold: true
+jupyter: julia-1.10
+---
 
+## Load Modules
+
+```{julia}
 using Plots
 
 include("src/mol_dyn_md.jl")
 using .MolDyn
+```
 
-###########################################################
-# CONSTANTS                                               #
-###########################################################
+## Setup and Run Simulation
 
+### Define Constants
+
+```{julia}
 kg_per_amu = 1.661e-27
 num_steps = 25000
+```
 
-###########################################################
-# ARRAYS HOLDING ATOM AND BOND INFORMATION                #
-###########################################################
+### ARRAYS HOLDING ATOM AND BOND INFORMATION
 
+```{julia}
 # Positions (xs), velocities (vs), and accelerations (accels) arrays:
 # First axis is timestep
 # Second axis are atoms
@@ -39,11 +50,11 @@ tkes = zeros(Float64, num_steps)
 # at each timestep
 
 tpes = zeros(Float64, num_steps)
+```
 
-###########################################################
-# INITIALIZE SIMULATION                                   #
-###########################################################
+### Initialize Simulation
 
+```{julia}
 # Equilibrium bond length for HCl
 r_ab_eq_hcl = 1.57e-10
 
@@ -52,13 +63,9 @@ r_ab_eq_hcl = 1.57e-10
 # HCl equilibrium bond length
 xs[1, 2, :] = [r_ab_eq_hcl*0.999, 0.0, 0.0]
 
-# # Masses, Cl first then H
-# ms[1] = 35 * kg_per_amu
-# ms[2] = 1 * kg_per_amu
-
-# Make each mass the reduced mass of 1H35Cl
-ms[1] = (35*1) / (35+1) * kg_per_amu
-ms[2] = (35*1) / (35+1) * kg_per_amu
+# Masses, Cl first then H
+ms[1] = 35 * kg_per_amu
+ms[2] = 1 * kg_per_amu
 
 # 1-2 Bonds
 # Rows are bonds, columns are atoms participating in bond
@@ -76,26 +83,36 @@ one_two_bonds_kab = [516.0 516.0]
 # Note: There is a distance for each direction of the bond
 
 one_two_bonds_req = [r_ab_eq_hcl r_ab_eq_hcl]
+```
 
-###########################################################
-# VELOCITY VERLET                                         #
-###########################################################
+### Velocity Verlet
 
+```{julia}
 dt = 1e-18
-
 stretch_velocity_verlet(xs, vs, accels, tkes, tpes, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps)
+```
 
-###########################################################
-# PLOT H X-AXIS TRAJECTORY                                #
-###########################################################
+## Calculate Analytical Period
 
-display(plot(eachindex(xs[:, 2, 1])/1000, xs[:, 2, 1], xlabel="Time (fs)", ylabel="H x position (m)"))
-println("When done looking at the trajectory plot, press enter to continue.")
-readline()
+```{julia}
+μ = 1/(1/ms[1]+1/ms[2])
+2π * sqrt(μ/one_two_bonds_kab[1])
+```
 
+## Make Plots
+
+### X-Coordinate of Hydrogen
+
+The period approximately agrees with analytical period.
+
+```{julia}
+plot(eachindex(xs[:, 2, 1])/1000, xs[:, 2, 1], xlabel="Time (fs)", ylabel="H x position (m)")
+```
+
+### Total Energy
+
+```{julia}
 plot(eachindex(xs[:, 2, 1])/1000, tkes, xlabel="Time (fs)", ylabel="J", label="Ek")
 plot!(eachindex(xs[:, 2, 1])/1000, tpes, label="Ep")
-energy_plot = plot!(eachindex(xs[:, 2, 1])/1000, tpes + tkes, label="total")
-display(energy_plot)
-println("When done looking the kinetic energies plot, press enter to exit.")
-readline()
+plot!(eachindex(xs[:, 2, 1])/1000, tpes + tkes, label="total")
+```
