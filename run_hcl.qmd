@@ -1,16 +1,22 @@
 ---
-title: "qmd Demo"
-author: "Foo"
+title: "MolDynMD-jl HCl Trajectory"
+author: "Alicia Key"
 date: "03/10/2024"
 format:
   html:
     code-fold: true
+editor: source
 jupyter: julia-1.10
 ---
 
-## Load Modules
+## Purpose of this markdown
+
+The main code that runs the simulation is in the `src/mol_dyn_md.jl` source file. This markdown contians the code to run a simulation using the `MolDyn` module and wrap the inputs and outputs into a nice format.
 
 ```{julia}
+#| label: load-modules
+#| include: false
+
 using Plots
 
 include("src/mol_dyn_md.jl")
@@ -21,14 +27,24 @@ using .MolDyn
 
 ### Define Constants
 
+Expand code block below to see the contants, which include an amu to kg conversion and the number of steps in the simulation.
+
 ```{julia}
+#| label: set-constants
+#| include: true
+
 kg_per_amu = 1.661e-27
-num_steps = 25000
+num_steps = 25000;  # Semicolon to suppress code output from final document
 ```
 
-### ARRAYS HOLDING ATOM AND BOND INFORMATION
+### Vectors and matrices holding simulation information.
+
+Expand the code block below to see the vectors and matrices holding simulation information, including atom velocities, bond connections, energy history and more.
 
 ```{julia}
+#| label: vectors-and-matrices
+#| include: true
+
 # Positions (xs), velocities (vs), and accelerations (accels) arrays:
 # First axis is timestep
 # Second axis are atoms
@@ -49,12 +65,17 @@ tkes = zeros(Float64, num_steps)
 # Total potential energies: Total potential energy of the system
 # at each timestep
 
-tpes = zeros(Float64, num_steps)
+tpes = zeros(Float64, num_steps);  # Semicolon to suppress code output from final document
 ```
 
 ### Initialize Simulation
 
+Set the initial conditions of the simulation, including start positions and velocities of the atoms and their masses. Also set up the bonds here.
+
 ```{julia}
+#| label: initialize-simulation
+#| include: true
+
 # Equilibrium bond length for HCl
 r_ab_eq_hcl = 1.57e-10
 
@@ -82,19 +103,32 @@ one_two_bonds_kab = [516.0 516.0]
 # 1-2 Bonds, equilibrium distances
 # Note: There is a distance for each direction of the bond
 
-one_two_bonds_req = [r_ab_eq_hcl r_ab_eq_hcl]
+one_two_bonds_req = [r_ab_eq_hcl r_ab_eq_hcl];  # Semicolon to suppress code output from final document
 ```
 
 ### Velocity Verlet
 
+Now for the fun part: Run the simulation! Expand the code block to see the function callt that runs the trajectory with a velocity verlet algorithm.
+
 ```{julia}
+#| label: velocity-verlet
+#| include: true
+
 dt = 1e-18
-stretch_velocity_verlet(xs, vs, accels, tkes, tpes, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps)
+stretch_velocity_verlet(xs, vs, accels, tkes, tpes, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps);  # Semicolon to suppress code output from final document
 ```
 
 ## Calculate Analytical Period
 
+As a check of the simulation, calculate the analytical period of the oscillation of the <sup>1</sup>H<sup>35</sup>Cl bond. Units are in seconds. Equation used is the following
+
+$$ {1 \over \mu} = {1 \over m_1} + {1 \over m_2} $$
+$$ T = \sqrt{\mu \over k_b} $$
+
 ```{julia}
+#| label: analytical-period
+#| include: true
+
 μ = 1/(1/ms[1]+1/ms[2])
 2π * sqrt(μ/one_two_bonds_kab[1])
 ```
@@ -103,16 +137,28 @@ stretch_velocity_verlet(xs, vs, accels, tkes, tpes, one_two_bonds, one_two_bonds
 
 ### X-Coordinate of Hydrogen
 
-The period approximately agrees with analytical period.
+Plot the x-coordinate of the hydrogen. Notice that the period on the plot agrees with analytical period!
 
 ```{julia}
-plot(eachindex(xs[:, 2, 1])/1000, xs[:, 2, 1], xlabel="Time (fs)", ylabel="H x position (m)")
+#| label: x-coordinate-of-hydrogen
+#| include: true
+
+x_axis = eachindex(xs[:, 2, 1]) / 1000
+h_x_axis_trajectory = xs[:, 2, 1]
+hydrogen_plot = plot(x_axis, h_x_axis_trajectory, xlabel="Time (fs)", ylabel="H x position (m)")
+display(hydrogen_plot)
 ```
 
 ### Total Energy
 
+Plot the kinetic, potential, and total energy of the system.
+
 ```{julia}
-plot(eachindex(xs[:, 2, 1])/1000, tkes, xlabel="Time (fs)", ylabel="J", label="Ek")
-plot!(eachindex(xs[:, 2, 1])/1000, tpes, label="Ep")
-plot!(eachindex(xs[:, 2, 1])/1000, tpes + tkes, label="total")
+#| label: energy-plots
+#| include: true
+
+plot(x_axis, tkes, xlabel="Time (fs)", ylabel="J", label="Ek")
+plot!(x_axis, tpes, label="Ep")
+energy_plot = plot!(x_axis, tpes + tkes, label="total")
+display(energy_plot)
 ```
