@@ -8,29 +8,27 @@ format:
 jupyter: julia-1.10
 ---
 
-## Run Simulation
+## Load Modules
 
 ```{julia}
-###########################################################
-# MODULES                                                 #
-###########################################################
-
 using Plots
 
 include("src/mol_dyn_md.jl")
 using .MolDyn
+```
 
-###########################################################
-# CONSTANTS                                               #
-###########################################################
+## Setup and Run Simulation
 
+### Define Constants
+
+```{julia}
 kg_per_amu = 1.661e-27
 num_steps = 25000
+```
 
-###########################################################
-# ARRAYS HOLDING ATOM AND BOND INFORMATION                #
-###########################################################
+### ARRAYS HOLDING ATOM AND BOND INFORMATION
 
+```{julia}
 # Positions (xs), velocities (vs), and accelerations (accels) arrays:
 # First axis is timestep
 # Second axis are atoms
@@ -52,11 +50,11 @@ tkes = zeros(Float64, num_steps)
 # at each timestep
 
 tpes = zeros(Float64, num_steps)
+```
 
-###########################################################
-# INITIALIZE SIMULATION                                   #
-###########################################################
+### Initialize Simulation
 
+```{julia}
 # Equilibrium bond length for HCl
 r_ab_eq_hcl = 1.57e-10
 
@@ -89,19 +87,20 @@ one_two_bonds_kab = [516.0 516.0]
 # Note: There is a distance for each direction of the bond
 
 one_two_bonds_req = [r_ab_eq_hcl r_ab_eq_hcl]
+```
 
-###########################################################
-# VELOCITY VERLET                                         #
-###########################################################
+### Velocity Verlet
 
+```{julia}
 dt = 1e-18
-
 stretch_velocity_verlet(xs, vs, accels, tkes, tpes, one_two_bonds, one_two_bonds_kab, one_two_bonds_req, ms, dt, num_steps)
 ```
 
 ## Make Plots
 
 ### X-Coordinate of Hydrogen
+
+Look at that plot!
 
 ```{julia}
 plot(eachindex(xs[:, 2, 1])/1000, xs[:, 2, 1], xlabel="Time (fs)", ylabel="H x position (m)")
