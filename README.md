@@ -19,3 +19,17 @@ Once this is done, on macOS, execute Quarto from this repo's folder with
 ```
 quarto preview /ABSOLUTE/PATH/TO/run_hcl.qmd
 ```
+
+### On Making Quarto Work
+
+Note: This requires that Quarto can find Jupyter and the IJulia Jupyter kernel. To install it, ake the following steps 
+
+Install Jupyter Lab in a conda environment:
+
+```
+conda create -n MolDynMD-jl python=3.11
+conda activate MolDynMD-jl
+conda install jupyterlab
+```
+
+Then, with the 
