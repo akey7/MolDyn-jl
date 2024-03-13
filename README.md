@@ -32,4 +32,17 @@ conda activate MolDynMD-jl
 conda install jupyterlab
 ```
 
-Then, with the 
+Then, with the environment still activated, run the following commands from the Julia REPL:
+
+```
+using Pkg
+Pkg.add("IJulia")
+```
+
+You should let it install its own conda environment. But to use Julia with Quarto, there is one more step.
+
+```
+Pkg.build("IJulia")
+```
+
+You should now have Jupyter and the IJulia kernel installed!
