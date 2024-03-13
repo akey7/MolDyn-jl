@@ -30,3 +30,9 @@ Manifest.toml
 *.png
 *.gif
 *.jpg
+
+# Intermediate builds
+*.html
+*.css
+*.js
+*.woff
