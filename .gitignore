@@ -36,3 +36,6 @@ Manifest.toml
 *.css
 *.js
 *.woff
+
+# Python environments
+env/
